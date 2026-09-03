@@ -9,3 +9,18 @@ rules:
     # purpose of the trigger and is preferable to a comment-posting bot.
     ignore:
       - conventional-commits.yml:3
+
+  stale-action-refs:
+    # The four NerdIT-Tech/.github reusable workflows we consume are pinned by
+    # bare commit SHA (documented inline in each workflow). Unlike composite
+    # actions under .github/actions/, reusable workflows are not release-please
+    # packages, so they have no version tags -- the commit SHAs are the only
+    # stable, immutable pin available. stale-action-refs assumes every pinned
+    # SHA should correspond to a release tag, which does not hold for these
+    # internal reusable workflows; re-pointing them is not possible without
+    # tagging, and the SHA pins are already the org's chosen, safe convention.
+    ignore:
+      - actionlint.yml
+      - conventional-commits.yml
+      - yaml-lint.yml
+      - zizmor.yml
