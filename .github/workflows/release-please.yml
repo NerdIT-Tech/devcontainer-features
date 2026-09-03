@@ -6,32 +6,48 @@ on:
       - main
 
 permissions:
-  contents: write
-  pull-requests: write
+  contents: read
+
+concurrency:
+  group: release-please-main
+  cancel-in-progress: false
 
 jobs:
   release-please:
+    name: Create release PRs
     runs-on: ubuntu-latest
+    # contents: write + pull-requests: write are required by release-please
+    # itself (it creates version-bump PRs, tags, and GitHub Releases). These
+    # are suppressed in .github/zizmor.yml with the same justification.
+    permissions:
+      contents: write  # release-please creates release tags, branches and Releases
+      pull-requests: write  # release-please opens version-bump PRs
     steps:
-      - uses: googleapis/release-please-action@v5
+      - uses: googleapis/release-please-action@45996ed1f6d02564a971a2fa1b5860e934307cf7  # v5.0.0
         id: release
         with:
           config-file: .release-please-config.json
           manifest-file: .release-please-manifest.json
 
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         if: ${{ steps.release.outputs.paths_released != '[]' }}
         with:
           fetch-depth: 0
+          persist-credentials: false
 
       - name: Move floating major version tags
         if: ${{ steps.release.outputs.paths_released != '[]' }}
         env:
           PATHS_RELEASED: ${{ steps.release.outputs.paths_released }}
           RELEASE_OUTPUTS: ${{ toJson(steps.release.outputs) }}
+          # Only used to push the floating tags via an immutable ref rewrite;
+          # never persisted to the worktree because checkout sets
+          # persist-credentials: false above.
+          GITHUB_TOKEN: ${{ github.token }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+          git remote set-url origin "https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
           for path in $(jq -r '.[]' <<<"$PATHS_RELEASED"); do
             key="${path}--tag_name"
             [ "$path" = "." ] && key="tag_name"

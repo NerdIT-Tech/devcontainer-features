@@ -1,0 +1,11 @@
+rules:
+  dangerous-triggers:
+    # conventional-commits.yml intentionally uses pull_request_target solely to
+    # run a read-only PR-title lint. The job executes only a commit-SHA-pinned
+    # reusable workflow from NerdIT-Tech/.github that never checks out untrusted
+    # content, never evaluates PR-sourced code, and never accesses secrets, so the
+    # write-to-checkout / secret-exposure risk pull_request_target normally carries
+    # does not apply. The naive "lint the PR title" use is the documented, supported
+    # purpose of the trigger and is preferable to a comment-posting bot.
+    ignore:
+      - conventional-commits.yml:3

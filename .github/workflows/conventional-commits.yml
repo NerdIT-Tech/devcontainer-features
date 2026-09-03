@@ -4,6 +4,9 @@ on:
   pull_request_target:
     types: [opened, edited, reopened, synchronize]
 
+permissions:
+  contents: read
+
 jobs:
   lint-pr-title:
     name: Lint PR title
@@ -17,9 +20,9 @@ jobs:
     # actions under .github/actions/ are), so it has no version tag yet.
     uses: NerdIT-Tech/.github/.github/workflows/reusable-semantic-pr-title.yml@d2e8e341f3c86067944425fdc3aa9c400edd2c4a
     permissions:
-      contents: read
-      pull-requests: write
-      statuses: write
+      contents: read  # read caller repo for the reusable semantic-pr-title composite
+      pull-requests: write  # sticky "PR title lint" comment on the PR
+      statuses: write  # report PR check status for the title lint
     with:
       # Types/requireScope/subjectPattern/exampleCommitTitle already match the
       # reusable workflow's defaults (ported from this repo's own config).
