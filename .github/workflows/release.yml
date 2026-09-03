@@ -1,0 +1,50 @@
+name: Release Dev Container Features
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+  packages: write
+
+concurrency:
+  group: ${{ github.workflow }}
+
+jobs:
+  deploy:
+    if: ${{ github.ref == 'refs/heads/main' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Publish Features
+        uses: devcontainers/action@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          base-path-to-features: "./src"
+          generate-docs: "true"
+          publish-features: "true"
+
+      - name: Create PR for Documentation
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config --global user.email github-actions[bot]@users.noreply.github.com
+          git config --global user.name github-actions[bot]
+          git config pull.rebase false
+
+          branch=automated-documentation-update-$GITHUB_RUN_ID
+          git checkout -b "$branch"
+
+          git add src/*/README.md
+          has_updates=true
+          git commit -m "docs: automated feature documentation update" || has_updates=false
+
+          if [ "$has_updates" = "true" ]; then
+              git push origin "$branch"
+              gh pr create --title "docs: automated feature documentation update" --body "Auto-generated from the Release dev container features workflow."
+          fi
+        shell: bash

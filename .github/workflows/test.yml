@@ -1,0 +1,44 @@
+name: Test Dev Container Features
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  validate-manifests:
+    name: Validate feature manifests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate each feature manifest and install script
+        shell: bash
+        run: |
+          set -euo pipefail
+          any_failed=false
+          for dir in src/*/; do
+            name="$(basename "$dir")"
+            echo "--- validating $name ---"
+            # devcontainer-feature.json must be valid JSON
+            python3 -c "import json,sys; json.load(open('$dir/devcontainer-feature.json'))" \
+              || { echo "invalid JSON in ${name}"; any_failed=true; }
+            # install.sh must exist and be syntactically valid bash
+            if [ ! -f "$dir/install.sh" ]; then
+              echo "missing install.sh in ${name}"; any_failed=true
+            else
+              bash -n "$dir/install.sh" || { echo "syntax error in ${name}/install.sh"; any_failed=true; }
+            fi
+            # onCreate.sh must be syntactically valid if present
+            if [ -f "$dir/onCreate.sh" ]; then
+              bash -n "$dir/onCreate.sh" || { echo "syntax error in ${name}/onCreate.sh"; any_failed=true; }
+            fi
+          done
+          if [ "$any_failed" = true ]; then
+            echo "::error::One or more features failed validation"
+            exit 1
+          fi
