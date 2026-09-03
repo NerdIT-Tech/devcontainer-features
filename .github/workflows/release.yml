@@ -1,25 +1,30 @@
 name: Release Dev Container Features
 
 on:
+  push:
+    tags:
+      - "claude-cache/v*"
+      - "opencode/v*"
+      - "opencode-data/v*"
   workflow_dispatch:
 
 permissions:
   contents: write
-  pull-requests: write
   packages: write
+  pull-requests: write
 
 concurrency:
-  group: ${{ github.workflow }}
+  group: release-features
+  cancel-in-progress: false
 
 jobs:
-  deploy:
-    if: ${{ github.ref == 'refs/heads/main' }}
+  publish:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
-      - name: Publish Features
+      - name: Publish Features to GHCR
         uses: devcontainers/action@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -28,23 +33,21 @@ jobs:
           generate-docs: "true"
           publish-features: "true"
 
-      - name: Create PR for Documentation
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Package feature archives
         run: |
-          git config --global user.email github-actions[bot]@users.noreply.github.com
-          git config --global user.name github-actions[bot]
-          git config pull.rebase false
-
-          branch=automated-documentation-update-$GITHUB_RUN_ID
-          git checkout -b "$branch"
-
-          git add src/*/README.md
-          has_updates=true
-          git commit -m "docs: automated feature documentation update" || has_updates=false
-
-          if [ "$has_updates" = "true" ]; then
-              git push origin "$branch"
-              gh pr create --title "docs: automated feature documentation update" --body "Auto-generated from the Release dev container features workflow."
-          fi
+          mkdir -p "$RUNNER_TEMP/features"
+          for feature in src/*/; do
+            [ -f "$feature/devcontainer-feature.json" ] || continue
+            manifest="$feature/devcontainer-feature.json"
+            id="$(python3 -c 'import json,sys;print(json.load(open(sys.argv[1]))["id"])' "$manifest")"
+            version="$(python3 -c 'import json,sys;print(json.load(open(sys.argv[1]))["version"])' "$manifest")"
+            tar -czf "$RUNNER_TEMP/features/${id}_${version}.tgz" -C "$feature" .
+          done
         shell: bash
+
+      - name: Upload feature archives
+        uses: actions/upload-artifact@v4
+        with:
+          name: devcontainer-features
+          path: ${{ runner.temp }}/features/*.tgz
+          if-no-files-found: error

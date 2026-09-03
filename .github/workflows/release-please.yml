@@ -1,0 +1,45 @@
+name: release-please
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: googleapis/release-please-action@v5
+        id: release
+        with:
+          config-file: .release-please-config.json
+          manifest-file: .release-please-manifest.json
+
+      - uses: actions/checkout@v7
+        if: ${{ steps.release.outputs.paths_released != '[]' }}
+        with:
+          fetch-depth: 0
+
+      - name: Move floating major version tags
+        if: ${{ steps.release.outputs.paths_released != '[]' }}
+        env:
+          PATHS_RELEASED: ${{ steps.release.outputs.paths_released }}
+          RELEASE_OUTPUTS: ${{ toJson(steps.release.outputs) }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          for path in $(jq -r '.[]' <<<"$PATHS_RELEASED"); do
+            key="${path}--tag_name"
+            [ "$path" = "." ] && key="tag_name"
+            TAG=$(jq -r --arg key "$key" '.[$key]' <<<"$RELEASE_OUTPUTS")
+            VERSION="${TAG##*/v}"
+            COMPONENT="${TAG%/v"${VERSION}"}"
+            MAJOR="${VERSION%%.*}"
+            FLOAT_TAG="${COMPONENT}/v${MAJOR}"
+            git tag -f "$FLOAT_TAG" "$TAG"
+            git push origin "$FLOAT_TAG" --force
+          done
