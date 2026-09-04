@@ -10,7 +10,6 @@
     "src/claude-cache": {
       "component": "claude-cache",
       "release-type": "simple",
-      "release-as": "0.1.0",
       "extra-files": [
         {
           "type": "json",
@@ -22,7 +21,6 @@
     "src/opencode": {
       "component": "opencode",
       "release-type": "simple",
-      "release-as": "0.1.0",
       "extra-files": [
         {
           "type": "json",
@@ -34,7 +32,6 @@
     "src/opencode-data": {
       "component": "opencode-data",
       "release-type": "simple",
-      "release-as": "0.1.0",
       "extra-files": [
         {
           "type": "json",
