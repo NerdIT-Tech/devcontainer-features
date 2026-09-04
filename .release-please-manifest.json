@@ -1,5 +1,5 @@
 {
-  "src/claude-cache": "0.0.0",
+  "src/claude-cache": "0.1.0",
   "src/opencode": "0.1.0",
   "src/opencode-data": "0.0.0"
 }
