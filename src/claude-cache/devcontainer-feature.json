@@ -5,7 +5,11 @@
     "description": "Provides persistent data and configuration for Claude Code via a self-declared named-volume mount. Mounts a claude-cache volume, then sets up a symlink so Claude Code's ~/.claude directory points into the volume, surviving container rebuilds.",
     "options": {},
     "mounts": [
-        "source=claude-cache-${devcontainerId},target=/mnt/claude-cache,type=volume"
+        {
+            "source": "claude-cache-${devcontainerId}",
+            "target": "/mnt/claude-cache",
+            "type": "volume"
+        }
     ],
     "onCreateCommand": "/usr/local/share/claude-cache/onCreate.sh",
     "installsAfter": [
