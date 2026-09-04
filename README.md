@@ -9,6 +9,7 @@ Each feature lives in `src/<feature>/` and can be referenced from any
 | Feature | Description |
 |---------|-------------|
 | [`claude-cache`](src/claude-cache/README.md) | Persist Claude Code's `~/.claude` data/config |
+| [`go-cache`](src/go-cache/README.md) | Persist Go build & module caches |
 | [`opencode`](src/opencode/README.md) | Install the OpenCode CLI |
 | [`opencode-data`](src/opencode-data/README.md) | Persist OpenCode data/config via named volumes |
 

@@ -1,0 +1,23 @@
+{
+    "id": "go-cache",
+    "version": "0.0.0",
+    "name": "Persist Go build & module caches",
+    "description": "Persists the Go build cache and module cache across container rebuilds via self-declared named-volume mounts. Mounts go-build and go-pkg volumes, then symlinks Go's XDG build-cache dir (~/.cache/go-build) and module-cache dir ($GOPATH/pkg) into them so recompiles and re-downloads are avoided across rebuilds.",
+    "options": {},
+    "mounts": [
+        {
+            "source": "go-build-${devcontainerId}",
+            "target": "/mnt/go-build",
+            "type": "volume"
+        },
+        {
+            "source": "go-pkg-${devcontainerId}",
+            "target": "/mnt/go-pkg",
+            "type": "volume"
+        }
+    ],
+    "onCreateCommand": "/usr/local/share/go-cache/onCreate.sh",
+    "installsAfter": [
+        "ghcr.io/devcontainers/features/common-utils"
+    ]
+}
