@@ -50,6 +50,17 @@
           "jsonpath": "$.version"
         }
       ]
+    },
+    "src/podman-remote": {
+      "component": "podman-remote",
+      "release-type": "simple",
+      "extra-files": [
+        {
+          "type": "json",
+          "path": "devcontainer-feature.json",
+          "jsonpath": "$.version"
+        }
+      ]
     }
   }
 }

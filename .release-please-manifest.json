@@ -2,5 +2,6 @@
   "src/claude-cache": "0.1.1",
   "src/go-cache": "0.0.0",
   "src/opencode": "0.1.1",
-  "src/opencode-data": "0.1.1"
+  "src/opencode-data": "0.1.1",
+  "src/podman-remote": "0.0.0"
 }
