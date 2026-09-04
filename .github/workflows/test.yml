@@ -24,6 +24,14 @@ jobs:
         with:
           persist-credentials: false
 
+      - name: Validate devcontainer-feature.json against the spec schema
+        # Rich validation from the devcontainers/feature-starter template:
+        # checks every manifest against the containers.dev Feature schema.
+        uses: devcontainers/action@1082abd5d2bf3a11abccba70eef98df068277772  # v1.4.3
+        with:
+          validate-only: "true"
+          base-path-to-features: "./src"
+
       - name: Validate each feature manifest and install script
         shell: bash
         run: |

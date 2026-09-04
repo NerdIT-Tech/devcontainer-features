@@ -129,8 +129,12 @@ the version-bump PR and do it for you.
 ## CI that will run on your change
 
 - `.github/workflows/test.yml` — validates every
-  `src/*/devcontainer-feature.json` parses as JSON, `install.sh` exists and
+  `src/*/devcontainer-feature.json` against the spec schema
+  (`devcontainers/action validate-only`) and checks `install.sh` exists and
   `bash -n` clean, and any `onCreate.sh` is syntactically valid.
+- `.github/workflows/test-features.yml` — builds each Feature in a container
+  and runs its `test.sh` via `@devcontainers/cli features test`, plus scenario
+  tests for Features that need volume mounts / lifecycle hooks (`test/`).
 - `.github/workflows/actionlint.yml`, `yaml-lint.yml`, `zizmor.yml`,
   `conventional-commits.yml` — lint the workflows and the PR title (must be
   conventional commits like `feat(feature): #N add my-feature`).
