@@ -19,8 +19,8 @@ Reference a feature from a `devcontainer.json` by its published OCI name:
 ```jsonc
 {
   "features": {
-    "ghcr.io/nerdit-tech/devcontainer-features/opencode:1": {},
-    "ghcr.io/nerdit-tech/devcontainer-features/opencode-data:1": {}
+    "ghcr.io/nerdit-tech/devcontainer-features/opencode:0": {},
+    "ghcr.io/nerdit-tech/devcontainer-features/opencode-data:0": {}
   }
 }
 ```

@@ -145,7 +145,8 @@ Publishing is handled by `.github/workflows/release.yml` →
 `publish-features: true`). It pushes each Feature to
 `ghcr.io/nerdit-tech/devcontainer-features/<feature>` and a metadata package
 at the collection root (the namespace only), which index crawlers need.
-Reference a published Feature as `ghcr.io/nerdit-tech/devcontainer-features/<feature>:1`. You
+Reference a published Feature as `ghcr.io/nerdit-tech/devcontainer-features/<feature>:<major>`,
+using the floating major tag (currently `:0` while features are at `0.x`). You
 do not normally do this by hand — the release flow does it.
 
 ## Checklist for a new feature
