@@ -24,3 +24,14 @@ rules:
       - conventional-commits.yml
       - yaml-lint.yml
       - zizmor.yml
+
+  secrets-outside-env:
+    # release-please.yml mints a `nerdit-releaser` GitHub App token via
+    # actions/create-github-app-token. Its `private-key` input must be the PEM
+    # secret itself (the action reads it as an input, not from a step env), so
+    # referencing secrets.RELEASER_PRIVATE_KEY inline is the only way to pass
+    # it. The token is repo-scoped (owner + repositories) and limited to the
+    # explicit permission-* inputs it needs; `github-app` is thereby satisfied
+    # and the remaining runtime exposure is limited to a short-lived token.
+    ignore:
+      - release-please.yml:37
