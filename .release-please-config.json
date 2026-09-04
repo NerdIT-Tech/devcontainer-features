@@ -10,11 +10,10 @@
     "src/claude-cache": {
       "component": "claude-cache",
       "release-type": "simple",
-      "release-as": "0.1.0",
       "extra-files": [
         {
           "type": "json",
-          "path": "src/claude-cache/devcontainer-feature.json",
+          "path": "devcontainer-feature.json",
           "jsonpath": "$.version"
         }
       ]
@@ -22,11 +21,10 @@
     "src/opencode": {
       "component": "opencode",
       "release-type": "simple",
-      "release-as": "0.1.0",
       "extra-files": [
         {
           "type": "json",
-          "path": "src/opencode/devcontainer-feature.json",
+          "path": "devcontainer-feature.json",
           "jsonpath": "$.version"
         }
       ]
@@ -34,11 +32,10 @@
     "src/opencode-data": {
       "component": "opencode-data",
       "release-type": "simple",
-      "release-as": "0.1.0",
       "extra-files": [
         {
           "type": "json",
-          "path": "src/opencode-data/devcontainer-feature.json",
+          "path": "devcontainer-feature.json",
           "jsonpath": "$.version"
         }
       ]

@@ -1,6 +1,6 @@
 {
     "id": "opencode-data",
-    "version": "0.0.0",
+    "version": "0.1.0",
     "name": "Persist OpenCode data",
     "description": "Provides persistent data and configuration for OpenCode via self-declared named-volume mounts. Mounts opencode-data and opencode-config volumes, then sets up symlinks so OpenCode's XDG data (~/.local/share/opencode) and config (~/.config/opencode) directories point into the volumes, surviving container rebuilds.",
     "options": {},
