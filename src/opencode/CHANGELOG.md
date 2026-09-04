@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.1](https://github.com/NerdIT-Tech/devcontainer-features/compare/opencode/v0.1.0...opencode/v0.1.1) (2026-09-04)
+
+
+### Bug Fixes
+
+* **release:** use package-relative extra-files path so feature version stays in sync ([#16](https://github.com/NerdIT-Tech/devcontainer-features/issues/16)) ([f09b637](https://github.com/NerdIT-Tech/devcontainer-features/commit/f09b637d5addfee10c5057be34789e3edcfdaf68))
+
 ## 0.1.0 (2026-09-04)
 
 
