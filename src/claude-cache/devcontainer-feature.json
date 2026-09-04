@@ -1,6 +1,6 @@
 {
     "id": "claude-cache",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "name": "Persist Claude Code data",
     "description": "Provides persistent data and configuration for Claude Code via a self-declared named-volume mount. Mounts a claude-cache volume, then sets up a symlink so Claude Code's ~/.claude directory points into the volume, surviving container rebuilds.",
     "options": {},
