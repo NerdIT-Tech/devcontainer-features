@@ -7,3 +7,11 @@
 
 # Devcontainer feature test helpers
 node_modules/
+
+# Stale local feature copies and build artifacts (features now resolve from GHCR)
+.devcontainer/features/
+.devcontainer/devcontainer-lock.json
+
+# Logs
+*.log
+remoteContainers-*.log

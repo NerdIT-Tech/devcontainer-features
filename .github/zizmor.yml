@@ -35,3 +35,13 @@ rules:
     # and the remaining runtime exposure is limited to a short-lived token.
     ignore:
       - release-please.yml:37
+
+  adhoc-packages:
+    # test-features.yml installs @devcontainers/cli as a pinned-version global
+    # npm package to drive container-based feature tests (the canonical test
+    # runner from the devcontainers/feature-starter template). A lockfile-managed
+    # install is not practical here because we need a single binary for CI test
+    # execution, not a reproducible dev dependency. The version is pinned to
+    # @0.89.0 to avoid silently picking up a compromised release.
+    ignore:
+      - test-features.yml

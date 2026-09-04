@@ -39,6 +39,49 @@ jobs:
           generate-docs: "true"
           publish-features: "true"
 
+      - name: Ensure published GHCR packages are public
+        shell: bash
+        # GHCR packages created by GITHUB_TOKEN under an org are private by
+        # default, and there is no API to flip an existing org package to
+        # public (PATCH /orgs/{org}/packages/container/{name} returns 404;
+        # see helmforgedev/charts#94 which reverted this approach as
+        # non-functional with GITHUB_TOKEN). We cannot automate making them
+        # public here, so we GUARD it: fail the release if any package ends up
+        # private so the omission is caught immediately instead of surfacing
+        # later as an opaque 401 the next time a devcontainer tries to pull
+        # the feature. Flip visibility for any reported package to Public via
+        # the GitHub Packages web UI (the only supported path for org
+        # packages), then re-run the release.
+        run: |
+          set -euo pipefail
+          owner="${GITHUB_REPOSITORY_OWNER}"
+          repo="${GITHUB_REPOSITORY##*/}"
+          packages=("${repo}")
+          for feature in src/*/; do
+            [ -f "$feature/devcontainer-feature.json" ] || continue
+            id="$(python3 -c 'import json,sys;print(json.load(open(sys.argv[1]))["id"])' "$feature/devcontainer-feature.json")"
+            packages+=("${repo}/${id}")
+          done
+          failed="false"
+          for pkg in "${packages[@]}"; do
+            hdr="$(curl -sS -D - -o /dev/null "https://ghcr.io/v2/${owner}/${pkg}/manifests/latest" || true)"
+            realm="$(printf '%s\n' "$hdr" | sed -nE 's/.*realm="([^"]+)".*/\1/p' | head -n1)"
+            service="$(printf '%s\n' "$hdr" | sed -nE 's/.*service="([^"]+)".*/\1/p' | head -n1)"
+            scope="$(printf '%s\n' "$hdr" | sed -nE 's/.*scope="([^"]+)".*/\1/p' | head -n1)"
+            token="$(curl -fsS "${realm}?service=${service}&scope=${scope}" 2>/dev/null \
+              | python3 -c 'import sys,json;print(json.load(sys.stdin).get("token",""))' 2>/dev/null || true)"
+            if [ -n "$token" ]; then
+              echo "OK      ${owner}/${pkg} is public"
+            else
+              echo "ERROR   ${owner}/${pkg} is private - set it to Public in the GitHub Packages UI"
+              failed="true"
+            fi
+          done
+          if [ "$failed" = "true" ]; then
+            echo "::error::One or more GHCR packages are private. Make them public in the GitHub Packages web UI, then re-run this workflow."
+            exit 1
+          fi
+
       - name: Package feature archives
         run: |
           mkdir -p "$RUNNER_TEMP/features"

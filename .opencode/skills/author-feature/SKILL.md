@@ -129,8 +129,13 @@ the version-bump PR and do it for you.
 ## CI that will run on your change
 
 - `.github/workflows/test.yml` — validates every
-  `src/*/devcontainer-feature.json` parses as JSON, `install.sh` exists and
+  `src/*/devcontainer-feature.json` against the spec schema
+  (`devcontainers/action validate-only`) and checks `install.sh` exists and
   `bash -n` clean, and any `onCreate.sh` is syntactically valid.
+- `.github/workflows/test-features.yml` — builds each Feature in a container
+  and runs its `test/<feature>/test.sh` via `@devcontainers/cli features test`,
+  plus scenario tests for Features that need volume mounts / lifecycle hooks
+  (`test/<feature>/<scenario>.sh` + `scenarios.json`).
 - `.github/workflows/actionlint.yml`, `yaml-lint.yml`, `zizmor.yml`,
   `conventional-commits.yml` — lint the workflows and the PR title (must be
   conventional commits like `feat(feature): #N add my-feature`).
@@ -145,7 +150,8 @@ Publishing is handled by `.github/workflows/release.yml` →
 `publish-features: true`). It pushes each Feature to
 `ghcr.io/nerdit-tech/devcontainer-features/<feature>` and a metadata package
 at the collection root (the namespace only), which index crawlers need.
-Reference a published Feature as `ghcr.io/nerdit-tech/devcontainer-features/<feature>:1`. You
+Reference a published Feature as `ghcr.io/nerdit-tech/devcontainer-features/<feature>:<major>`,
+using the floating major tag (currently `:0` while features are at `0.x`). You
 do not normally do this by hand — the release flow does it.
 
 ## Checklist for a new feature
@@ -155,5 +161,7 @@ do not normally do this by hand — the release flow does it.
 3. Write `install.sh` (and `onCreate.sh` if there's a local-command hook).
 4. Add `version.txt` matching the json version; add the
    `.release-please-manifest.json` entry.
-5. Add a `test.sh` smoke test; keep everything `bash -n`-clean and JSON-valid.
+5. Add a `test/<feature>/test.sh` smoke test (the `@devcontainers/cli` expects
+   tests under the top-level `test/` dir, not inside `src/`); keep everything
+   `bash -n`-clean and JSON-valid.
 6. Open a PR with a conventional title (scope `feature`, `#N` subject).

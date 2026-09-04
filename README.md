@@ -19,8 +19,8 @@ Reference a feature from a `devcontainer.json` by its published OCI name:
 ```jsonc
 {
   "features": {
-    "ghcr.io/nerdit-tech/devcontainer-features/opencode:1": {},
-    "ghcr.io/nerdit-tech/devcontainer-features/opencode-data:1": {}
+    "ghcr.io/nerdit-tech/devcontainer-features/opencode:0": {},
+    "ghcr.io/nerdit-tech/devcontainer-features/opencode-data:0": {}
   }
 }
 ```
@@ -29,9 +29,13 @@ Reference a feature from a `devcontainer.json` by its published OCI name:
 
 Features are published to the GitHub Container Registry (`ghcr.io/nerdit-tech`)
 by the `release.yml` workflow (`devcontainers/action`), which also generates
-each feature's `README.md`. The `test.yml` workflow validates that every
-feature's manifest is well-formed and its install scripts are syntactically
-valid.
+each feature's `README.md`. For validation:
+- `test.yml` validates every feature's manifest against the containers.dev
+  schema (`devcontainers/action validate-only`) and checks that its install
+  scripts are syntactically valid.
+- `test-features.yml` actually builds each feature in a container and runs its
+  `test.sh` via the `@devcontainers/cli` (plus scenario tests under `test/`
+  for features that need volume mounts / lifecycle hooks).
 
 To add a new feature:
 
