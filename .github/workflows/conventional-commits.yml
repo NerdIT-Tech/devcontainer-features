@@ -1,0 +1,36 @@
+name: Conventional Commits
+
+on:
+  pull_request_target:
+    types: [opened, edited, reopened, synchronize]
+
+permissions:
+  contents: read
+
+jobs:
+  lint-pr-title:
+    name: Lint PR title
+    # The release-please bot opens its own PRs (e.g. "chore: release
+    # claude-cache 2.0.1") from conventional commits we generate; enforcing
+    # the human-facing title format on them adds no signal. Same rationale as
+    # the dependabot exclusion used elsewhere.
+    if: github.actor != 'release-please[bot]'
+    # Pinned by commit SHA, not a tag: reusable-semantic-pr-title.yml isn't
+    # one of NerdIT-Tech/.github's release-please packages (only the composite
+    # actions under .github/actions/ are), so it has no version tag yet.
+    uses: NerdIT-Tech/.github/.github/workflows/reusable-semantic-pr-title.yml@d2e8e341f3c86067944425fdc3aa9c400edd2c4a
+    permissions:
+      contents: read  # read caller repo for the reusable semantic-pr-title composite
+      pull-requests: write  # sticky "PR title lint" comment on the PR
+      statuses: write  # report PR check status for the title lint
+    with:
+      # Types/requireScope/subjectPattern/exampleCommitTitle already match the
+      # reusable workflow's defaults (ported from this repo's own config).
+      scopes: |
+        feature
+        features
+        ci
+        docs
+        deps
+        devcontainer
+        release

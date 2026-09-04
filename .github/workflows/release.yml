@@ -1,0 +1,59 @@
+name: Release Dev Container Features
+
+on:
+  push:
+    tags:
+      - "claude-cache/v*"
+      - "opencode/v*"
+      - "opencode-data/v*"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-features
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    name: Publish features
+    runs-on: ubuntu-latest
+    # packages: write is required to push the built features to GHCR via
+    # devcontainers/action; suppressed in .github/zizmor.yml with same reason.
+    permissions:
+      contents: read  # read-only checkout of the feature sources
+      packages: write  # publish built features to GHCR via devcontainers/action
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Publish Features to GHCR
+        uses: devcontainers/action@1082abd5d2bf3a11abccba70eef98df068277772  # v1.4.3
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          base-path-to-features: "./src"
+          generate-docs: "true"
+          publish-features: "true"
+
+      - name: Package feature archives
+        run: |
+          mkdir -p "$RUNNER_TEMP/features"
+          for feature in src/*/; do
+            [ -f "$feature/devcontainer-feature.json" ] || continue
+            manifest="$feature/devcontainer-feature.json"
+            id="$(python3 -c 'import json,sys;print(json.load(open(sys.argv[1]))["id"])' "$manifest")"
+            version="$(python3 -c 'import json,sys;print(json.load(open(sys.argv[1]))["version"])' "$manifest")"
+            tar -czf "$RUNNER_TEMP/features/${id}_${version}.tgz" -C "$feature" .
+          done
+        shell: bash
+
+      - name: Upload feature archives
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4.6.2
+        with:
+          name: devcontainer-features
+          path: ${{ runner.temp }}/features/*.tgz
+          if-no-files-found: error

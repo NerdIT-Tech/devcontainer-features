@@ -1,0 +1,9 @@
+# Editor
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+
+# Devcontainer feature test helpers
+node_modules/

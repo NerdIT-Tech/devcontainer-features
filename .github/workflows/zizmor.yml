@@ -1,0 +1,27 @@
+name: Zizmor
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/**"
+      - ".github/actions/**"
+      - ".github/zizmor.yml"
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: zizmor-${{ github.workflow }}-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  zizmor:
+    name: Audit workflows
+    # Pinned by commit SHA -- see conventional-commits.yml for why.
+    uses: NerdIT-Tech/.github/.github/workflows/reusable-zizmor.yml@41b0a3b6f8827523ab34e68766b76a82cd7bc7d3
+    permissions:
+      contents: read
+    with:
+      fail-on-finding: true
