@@ -2,7 +2,7 @@ name: Conventional Commits
 
 on:
   pull_request_target:
-    types: [opened, edited, reopened, synchronize]
+    types: [opened, edited, reopened, synchronize, labeled, unlabeled]
 
 permissions:
   contents: read
@@ -10,11 +10,11 @@ permissions:
 jobs:
   lint-pr-title:
     name: Lint PR title
-    # The release-please bot opens its own PRs (e.g. "chore: release
-    # claude-cache 2.0.1") from conventional commits we generate; enforcing
-    # the human-facing title format on them adds no signal. Same rationale as
-    # the dependabot exclusion used elsewhere.
-    if: github.actor != 'release-please[bot]'
+    # Every PR is linted, including automation PRs (release-please here acts
+    # as `nerdit-releaser[bot]`). Release-please PRs carry the
+    # `no-issue-required` label (see .release-please-config.json), which waives
+    # the `subjectPattern` issue-number check via amannn's defaults; labeled/
+    # unlabeled are wired in so label changes re-run the lint.
     # Pinned by commit SHA, not a tag: reusable-semantic-pr-title.yml isn't
     # one of NerdIT-Tech/.github's release-please packages (only the composite
     # actions under .github/actions/ are), so it has no version tag yet.
