@@ -1,6 +1,6 @@
 {
     "id": "podman-remote",
-    "version": "0.0.0",
+    "version": "1.0.0",
     "name": "Podman Remote Client",
     "documentationURL": "https://github.com/containers/podman",
     "description": "Installs the Podman CLI and sets CONTAINER_HOST to unix:///tmp/podman.sock so podman commands talk to the host's Podman socket (Docker-outside-of-Docker). The host socket is a host bind mount that this feature does not declare (the path is machine-specific); the consuming devcontainer.json must bind the hostSocketPath (default /var/run/user/1000/podman/podman.sock) to /tmp/podman.sock.",
