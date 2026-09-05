@@ -49,6 +49,17 @@ jobs:
           config-file: .release-please-config.json
           manifest-file: .release-please-manifest.json
 
+      # release-please's config only supports a single PR label, so the
+      # `no-issue-required` title-lint exemption label is applied here instead
+      # of in .release-please-config.json. Runs idempotently on every push.
+      - name: Add no-issue-required label to release PRs
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: |
+          for num in $(gh pr list --repo "$GITHUB_REPOSITORY" --label 'autorelease: pending' --json number -q '.[].number'); do
+            gh pr edit "$num" --add-label no-issue-required
+          done
+
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
         if: ${{ steps.release.outputs.paths_released != '[]' }}
         with:
