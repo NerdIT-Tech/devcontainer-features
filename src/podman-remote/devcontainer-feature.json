@@ -3,12 +3,12 @@
     "version": "0.0.0",
     "name": "Podman Remote Client",
     "documentationURL": "https://github.com/containers/podman",
-    "description": "Installs the Podman CLI and configures it to talk to the host's Podman socket (Docker-outside-of-Docker). Binds the host podman.sock into the container and sets CONTAINER_HOST so podman commands run containers on the host. The socket path is a bind mount, so a host that uses a non-default location must override this feature's mount in devcontainer.json.",
+    "description": "Installs the Podman CLI and configures it to talk to the host's Podman socket (Docker-outside-of-Docker). Sets CONTAINER_HOST so podman commands run containers on the host. The host socket itself is machine-specific and must be bound into the container by the consuming devcontainer.json (see the hostSocketPath option); this feature only prepares the CLI and environment.",
     "options": {
         "hostSocketPath": {
             "type": "string",
             "default": "/var/run/user/1000/podman/podman.sock",
-            "description": "Conventional path to the host Podman socket. Kept as the documented default; the actual bind mount is static and the source path follows this value."
+            "description": "Conventional path to the host Podman socket. This feature does not declare the bind mount itself (it is host-specific); add a bind mount in devcontainer.json sourcing this path to /tmp/podman.sock."
         }
     },
     "installsAfter": [
@@ -16,12 +16,5 @@
     ],
     "containerEnv": {
         "CONTAINER_HOST": "unix:///tmp/podman.sock"
-    },
-    "mounts": [
-        {
-            "source": "/var/run/user/1000/podman/podman.sock",
-            "target": "/tmp/podman.sock",
-            "type": "bind"
-        }
-    ]
+    }
 }
