@@ -2,27 +2,20 @@
     "id": "xdg-utils",
     "version": "0.0.0",
     "name": "XDG Utils with host browser pipe",
-    "description": "Installs xdg-utils and wraps xdg-open to forward URLs to the host browser through a unix pipe. Binds the host browser pipe into the container at /tmp/hostbrowserpipe; when the pipe is absent, xdg-open falls back to the real /usr/bin/xdg-open. The pipe path is a host bind mount, so a host that uses a non-default location must override this feature's mount in devcontainer.json.",
+    "description": "Installs xdg-utils and wraps xdg-open to forward URLs to the host browser through a unix pipe; when the pipe is absent, xdg-open falls back to the real /usr/bin/xdg-open. The host browser pipe is a host bind mount that this feature does not declare (paths are machine-specific); the consuming devcontainer.json must bind the hostBrowserPipePath to the containerBrowserPipePath (both default to /tmp/hostbrowserpipe).",
     "options": {
         "hostBrowserPipePath": {
             "type": "string",
             "default": "/tmp/hostbrowserpipe",
-            "description": "Path of the host browser pipe this feature declares as a bind mount (sourced to /tmp/hostbrowserpipe). Override the mount in devcontainer.json if your host uses a non-default location."
+            "description": "Path of the host browser pipe. Bind this path into the container (to the containerBrowserPipePath) via a mounts entry in devcontainer.json."
         },
         "containerBrowserPipePath": {
             "type": "string",
             "default": "/tmp/hostbrowserpipe",
-            "description": "Path inside the container where the host browser pipe is bound. The bind mount source follows the default; a non-default host path must override the mount in devcontainer.json."
+            "description": "Path inside the container where the host browser pipe is mounted; the xdg-open wrapper sends URLs to this path. Declare the matching host-to-container bind mount in devcontainer.json."
         }
     },
     "installsAfter": [
         "ghcr.io/devcontainers/features/common-utils"
-    ],
-    "mounts": [
-        {
-            "source": "/tmp/hostbrowserpipe",
-            "target": "/tmp/hostbrowserpipe",
-            "type": "bind"
-        }
     ]
 }
