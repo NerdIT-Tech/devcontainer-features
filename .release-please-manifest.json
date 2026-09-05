@@ -3,6 +3,6 @@
   "src/go-cache": "0.0.0",
   "src/opencode": "0.1.1",
   "src/opencode-data": "0.1.1",
-"src/podman-remote": "0.0.0",
+  "src/podman-remote": "0.0.0",
   "src/xdg-utils": "0.0.0"
 }
