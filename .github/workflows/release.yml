@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - "claude-cache/v*"
+      - "go-cache/v*"
       - "opencode/v*"
       - "opencode-data/v*"
   workflow_dispatch:

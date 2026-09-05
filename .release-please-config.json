@@ -18,6 +18,17 @@
         }
       ]
     },
+    "src/go-cache": {
+      "component": "go-cache",
+      "release-type": "simple",
+      "extra-files": [
+        {
+          "type": "json",
+          "path": "devcontainer-feature.json",
+          "jsonpath": "$.version"
+        }
+      ]
+    },
     "src/opencode": {
       "component": "opencode",
       "release-type": "simple",
