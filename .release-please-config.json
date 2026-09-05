@@ -51,8 +51,19 @@
         }
       ]
     },
-    "src/podman-remote": {
+"src/podman-remote": {
       "component": "podman-remote",
+      "release-type": "simple",
+      "extra-files": [
+        {
+          "type": "json",
+          "path": "devcontainer-feature.json",
+          "jsonpath": "$.version"
+        }
+      ]
+    },
+    "src/xdg-utils": {
+      "component": "xdg-utils",
       "release-type": "simple",
       "extra-files": [
         {
