@@ -7,7 +7,7 @@ on:
       - "go-cache/v*"
       - "opencode/v*"
       - "opencode-data/v*"
-- "podman-remote/v*"
+      - "podman-remote/v*"
       - "xdg-utils/v*"
   workflow_dispatch:
 
