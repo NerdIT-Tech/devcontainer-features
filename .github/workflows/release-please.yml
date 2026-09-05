@@ -56,8 +56,11 @@ jobs:
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
-          for num in $(gh pr list --repo "$GITHUB_REPOSITORY" --label 'autorelease: pending' --json number -q '.[].number'); do
-            gh pr edit "$num" --add-label no-issue-required
+          for num in $(gh search prs --repo "$GITHUB_REPOSITORY" \
+              --label 'autorelease: pending' --state open \
+              --json number --jq '.[].number'); do
+            gh api repos/$GITHUB_REPOSITORY/issues/$num/labels \
+              -f labels[]=no-issue-required >/dev/null
           done
 
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
