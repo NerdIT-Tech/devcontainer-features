@@ -1,0 +1,28 @@
+{
+    "id": "xdg-utils",
+    "version": "0.0.0",
+    "name": "XDG Utils with host browser pipe",
+    "description": "Installs xdg-utils and wraps xdg-open to forward URLs to the host browser through a unix pipe. Binds the host browser pipe into the container at a configurable path; when the pipe is absent, xdg-open falls back to the real /usr/bin/xdg-open.",
+    "options": {
+        "hostBrowserPipePath": {
+            "type": "string",
+            "default": "/tmp/hostbrowserpipe",
+            "description": "Path to the host browser pipe."
+        },
+        "containerBrowserPipePath": {
+            "type": "string",
+            "default": "/tmp/hostbrowserpipe",
+            "description": "Path inside the container where the host browser pipe is bound. The bind mount source is static and follows the option default; a non-default host path must override the mount in devcontainer.json."
+        }
+    },
+    "installsAfter": [
+        "ghcr.io/devcontainers/features/common-utils"
+    ],
+    "mounts": [
+        {
+            "source": "/tmp/hostbrowserpipe",
+            "target": "/tmp/hostbrowserpipe",
+            "type": "bind"
+        }
+    ]
+}

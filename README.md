@@ -13,6 +13,7 @@ Each feature lives in `src/<feature>/` and can be referenced from any
 | [`opencode`](src/opencode/README.md) | Install the OpenCode CLI |
 | [`opencode-data`](src/opencode-data/README.md) | Persist OpenCode data/config via named volumes |
 | [`podman-remote`](src/podman-remote/README.md) | Install the Podman remote client pointed at the host socket (bind the host socket yourself via `mounts`) |
+| [`xdg-utils`](src/xdg-utils/README.md) | Install xdg-utils with a host-browser-pipe xdg-open wrapper |
 
 ## Usage
 
