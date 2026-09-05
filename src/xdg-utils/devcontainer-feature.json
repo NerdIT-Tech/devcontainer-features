@@ -2,20 +2,27 @@
     "id": "xdg-utils",
     "version": "0.0.0",
     "name": "XDG Utils with host browser pipe",
-    "description": "Installs xdg-utils and wraps xdg-open to forward URLs to the host browser through a unix pipe. When the pipe is absent, xdg-open falls back to the real /usr/bin/xdg-open. The host browser pipe itself is machine-specific and must be bound into the container by the consuming devcontainer.json (see the containerBrowserPipePath option); this feature only installs the tools and wrapper.",
+    "description": "Installs xdg-utils and wraps xdg-open to forward URLs to the host browser through a unix pipe. Binds the host browser pipe into the container at /tmp/hostbrowserpipe; when the pipe is absent, xdg-open falls back to the real /usr/bin/xdg-open. The pipe path is a host bind mount, so a host that uses a non-default location must override this feature's mount in devcontainer.json.",
     "options": {
         "hostBrowserPipePath": {
             "type": "string",
             "default": "/tmp/hostbrowserpipe",
-            "description": "Path to the host browser pipe."
+            "description": "Path of the host browser pipe this feature declares as a bind mount (sourced to /tmp/hostbrowserpipe). Override the mount in devcontainer.json if your host uses a non-default location."
         },
         "containerBrowserPipePath": {
             "type": "string",
             "default": "/tmp/hostbrowserpipe",
-            "description": "Path inside the container where the host browser pipe is expected. This feature does not declare the bind mount itself (it is host-specific); add one in devcontainer.json sourcing the host pipe to this path."
+            "description": "Path inside the container where the host browser pipe is bound. The bind mount source follows the default; a non-default host path must override the mount in devcontainer.json."
         }
     },
     "installsAfter": [
         "ghcr.io/devcontainers/features/common-utils"
+    ],
+    "mounts": [
+        {
+            "source": "/tmp/hostbrowserpipe",
+            "target": "/tmp/hostbrowserpipe",
+            "type": "bind"
+        }
     ]
 }
