@@ -33,11 +33,11 @@ else
       echo "Unable to find latest release for major version v${MAJOR}" >&2
       exit 1
     fi
-    RESOLVED_VERSION="v${LATEST_PATCH}"
+    RESOLVED_VERSION="$LATEST_PATCH"
   else
-    RESOLVED_VERSION="v${VERSION_INPUT}"
+    RESOLVED_VERSION="${VERSION_INPUT#v}"
   fi
-  HOME="$install_dir" curl -fsSL https://opencode.ai/install | bash -s -- --no-modify-path --version "${RESOLVED_VERSION#v}"
+  HOME="$install_dir" curl -fsSL https://opencode.ai/install | bash -s -- --no-modify-path --version "$RESOLVED_VERSION"
 fi
 
 install -m 0755 "$install_dir/.opencode/bin/opencode" /usr/local/bin/opencode
