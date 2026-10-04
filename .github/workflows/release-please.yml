@@ -59,7 +59,7 @@ jobs:
           for num in $(gh search prs --repo "$GITHUB_REPOSITORY" \
               --label 'autorelease: pending' --state open \
               --json number --jq '.[].number'); do
-            gh api repos/$GITHUB_REPOSITORY/issues/$num/labels \
+            gh api "repos/$GITHUB_REPOSITORY/issues/$num/labels" \
               -f labels[]=no-issue-required >/dev/null
           done
 
