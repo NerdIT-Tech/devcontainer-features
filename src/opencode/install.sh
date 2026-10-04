@@ -11,47 +11,32 @@ install_dir="$(mktemp -d)"
 VERSION="${VERSION:-latest}"
 
 if [ "$VERSION" = "latest" ] || [ -z "$VERSION" ]; then
-  TAG=$(curl -fsSL "https://api.github.com/repos/anomalyco/opencode/releases/latest" | grep '"tag_name":' | sed 's/.*"tag_name": *"v//;s/".*//')
+  HOME="$install_dir" bash -c "unset VERSION; curl -fsSL https://opencode.ai/install | bash -s -- --no-modify-path"
 else
   VERSION_INPUT="${VERSION#v}"
   if [[ "$VERSION_INPUT" =~ ^[0-9]+$ ]]; then
     MAJOR="$VERSION_INPUT"
-    TAG=$(curl -fsSL "https://api.github.com/repos/anomalyco/opencode/releases" \
-      | grep '"tag_name":' \
-      | sed 's/.*"tag_name": *"v//;s/".*//' \
+    RESOLVED_VERSION=$(curl -fsSL "https://api.github.com/repos/anomalyco/opencode/releases" 2>/dev/null \
+      | grep -o '"tag_name": *"v[^"]*"' \
+      | sed 's/.*"v//' \
+      | sed 's/"//' \
       | grep -E "^${MAJOR}\." \
       | head -n 1)
-    if [ -z "$TAG" ]; then
+    if [ -z "$RESOLVED_VERSION" ]; then
       echo "Unable to find latest release for major version v${MAJOR}" >&2
       exit 1
     fi
   else
-    TAG="${VERSION_INPUT}"
+    RESOLVED_VERSION="${VERSION_INPUT}"
   fi
+  HOME="$install_dir" bash -c "curl -fsSL https://opencode.ai/install | VERSION='$RESOLVED_VERSION' bash -s -- --no-modify-path"
 fi
 
-OS=$(uname -s | tr '[:upper:]' '[:lower:]')
-ARCH=$(uname -m)
-[ "$ARCH" = "x86_64" ] && ARCH="x64"
-[ "$ARCH" = "aarch64" ] && ARCH="arm64"
-EXT=".tar.gz"
-[ "$OS" = "darwin" ] && EXT=".zip"
-[ "$OS" = "windows" ] && EXT=".zip"
-
-URL="https://github.com/anomalyco/opencode/releases/download/v${TAG}/${OS}-${ARCH}${EXT}"
-TMPDL=$(mktemp)
-curl -fsSL "$URL" -o "$TMPDL"
-
-mkdir -p "$install_dir/bin"
-if [ "$EXT" = ".tar.gz" ]; then
-  tar -xzf "$TMPDL" -C "$install_dir/bin"
+if [ -f "$install_dir/.opencode/bin/opencode" ]; then
+  install -m 0755 "$install_dir/.opencode/bin/opencode" /usr/local/bin/opencode
 else
-  unzip -o "$TMPDL" -d "$install_dir/bin"
+  find "$install_dir" -name "opencode" -not -path "*cache*" 2>/dev/null | head -n 1 | xargs -I{} install -m 0755 {} /usr/local/bin/opencode
 fi
-rm -f "$TMPDL"
-
-install -m 0755 "$install_dir/bin/opencode" /usr/local/bin/opencode 2>/dev/null || \
-  find "$install_dir/bin" -name "opencode" -not -path "*cache*" | xargs -I{} install -m 0755 {} /usr/local/bin/opencode
 
 rm -rf "$install_dir"
 opencode --version
