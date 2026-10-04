@@ -5,7 +5,7 @@
 [tools]
 node = "22"
 python = "3.12"
-uv = "latest"
+uv = "0.12.23"
 "npm:@devcontainers/cli" = "0.89.0"
 actionlint = "1.7.12"
 yamllint = "1.38.0"

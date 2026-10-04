@@ -8,6 +8,9 @@
 # Devcontainer feature test helpers
 node_modules/
 
+# OpenCode local dependencies
+.opencode/node_modules/
+
 # Stale local feature copies and build artifacts (features now resolve from GHCR)
 .devcontainer/features/
 .devcontainer/devcontainer-lock.json
