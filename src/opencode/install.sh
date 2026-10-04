@@ -16,7 +16,7 @@ install_dir="$(mktemp -d)"
 # Capture the requested version to pass through to the installer.
 VERSION="${VERSION:-latest}"
 
-if [ "$VERSION" = "latest" ]; then
+if [ "$VERSION" = "latest" ] || [ -z "$VERSION" ]; then
   curl -fsSL https://opencode.ai/install | HOME="$install_dir" bash -s -- --no-modify-path
 else
   # If only a major version (e.g., "2", "1", "v2") is provided, resolve to the
