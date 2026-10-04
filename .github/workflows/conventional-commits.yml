@@ -28,9 +28,16 @@ jobs:
       # Types/requireScope/subjectPattern/exampleCommitTitle/ignoreLabels all
       # match the reusable workflow's defaults (ported from this repo's own
       # config; ignoreLabels defaults to `no-issue-required`).
+      # Scope a PR title (and its paper trail) to the specific Feature it
+      # touches, per issue #42: `fix(xdg-utils): ...` rather than a generic
+      # `fix(features): ...`. Repo-wide changes keep the generic scopes.
       scopes: |
-        feature
-        features
+        claude-cache
+        go-cache
+        opencode
+        opencode-data
+        podman-remote
+        xdg-utils
         ci
         docs
         deps
