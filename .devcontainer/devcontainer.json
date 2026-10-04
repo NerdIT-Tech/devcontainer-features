@@ -2,6 +2,7 @@
     "image": "mcr.microsoft.com/devcontainers/base:0-ubuntu-22.04",
     "features": {
         "ghcr.io/devcontainers/features/github-cli:1": {},
-        "ghcr.io/nerdit-tech/devcontainer-features/opencode:0": {}
+        "ghcr.io/nerdit-tech/devcontainer-features/opencode:0": {},
+        "ghcr.io/atty303/devcontainer-features/mise:1": {}
     }
 }
