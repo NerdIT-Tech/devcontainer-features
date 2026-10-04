@@ -17,7 +17,7 @@ install_dir="$(mktemp -d)"
 VERSION="${VERSION:-latest}"
 
 if [ "$VERSION" = "latest" ] || [ -z "$VERSION" ]; then
-  HOME="$install_dir" bash -c "$(curl -fsSL https://opencode.ai/install)" "" --no-modify-path
+  HOME="$install_dir" curl -fsSL https://opencode.ai/install | bash -s -- --no-modify-path
 else
   # If only a major version (e.g., "2", "1", "v2") is provided, resolve to the
   # latest patch of that major from the anomalyco/opencode releases.
@@ -37,7 +37,7 @@ else
   else
     RESOLVED_VERSION="v${VERSION_INPUT}"
   fi
-  HOME="$install_dir" bash -c "$(curl -fsSL https://opencode.ai/install)" "" --no-modify-path --version "${RESOLVED_VERSION#v}"
+  HOME="$install_dir" curl -fsSL https://opencode.ai/install | bash -s -- --no-modify-path --version "${RESOLVED_VERSION#v}"
 fi
 
 install -m 0755 "$install_dir/.opencode/bin/opencode" /usr/local/bin/opencode
