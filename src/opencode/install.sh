@@ -37,7 +37,7 @@ else
   else
     RESOLVED_VERSION="${VERSION_INPUT}"
   fi
-  HOME="$install_dir" curl -fsSL https://opencode.ai/install | VERSION="$RESOLVED_VERSION" bash -s -- --no-modify-path
+  HOME="$install_dir" VERSION="$RESOLVED_VERSION" curl -fsSL https://opencode.ai/install | bash -s -- --no-modify-path
 fi
 
 if [ -f "$install_dir/.opencode/bin/opencode" ]; then
