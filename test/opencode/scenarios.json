@@ -1,0 +1,34 @@
+{
+    "version_v1": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "opencode": {
+                "version": "1"
+            }
+        }
+    },
+    "version_v2": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "opencode": {
+                "version": "2"
+            }
+        }
+    },
+    "version_latest": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "opencode": {
+                "version": "latest"
+            }
+        }
+    },
+    "version_specific": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "opencode": {
+                "version": "v1.18.34"
+            }
+        }
+    }
+}
