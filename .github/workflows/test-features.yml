@@ -44,8 +44,13 @@ jobs:
           EVENT_BEFORE: ${{ github.event.before }}
         run: |
           set -euo pipefail
-          autogen_all=(opencode podman-remote xdg-utils)
-          scenarios_all=(opencode-data claude-cache go-cache)
+          autogen_all=()
+          scenarios_all=()
+          for feature in src/*/; do
+            name="$(basename "$feature")"
+            [ -f "test/$name/test.sh" ] && autogen_all+=("$name")
+            [ -d "test/$name/scenarios" ] && scenarios_all+=("$name")
+          done
           if [ "$EVENT_NAME" = "pull_request" ]; then
             git fetch --no-tags origin "$BASE_REF"
             changed=$(git diff --name-only "origin/$BASE_REF...HEAD")
