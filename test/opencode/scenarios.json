@@ -1,4 +1,10 @@
 {
+    "default": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "opencode": {}
+        }
+    },
     "version_v1": {
         "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
         "features": {
@@ -28,6 +34,14 @@
         "features": {
             "opencode": {
                 "version": "v1.18.34"
+            }
+        }
+    },
+    "invalid_version": {
+        "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+        "features": {
+            "opencode": {
+                "version": "invalid-version-xyz"
             }
         }
     }
