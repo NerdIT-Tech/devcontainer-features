@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.2](https://github.com/NerdIT-Tech/devcontainer-features/compare/opencode/v0.1.1...opencode/v0.1.2) (2026-10-05)
+
+
+### Features
+
+* **feature:** [#39](https://github.com/NerdIT-Tech/devcontainer-features/issues/39) add support for pinning major version (v1/v2) and specific releases ([#40](https://github.com/NerdIT-Tech/devcontainer-features/issues/40)) ([95c9fcf](https://github.com/NerdIT-Tech/devcontainer-features/commit/95c9fcf847786867d35c842a899bd86e43aaf398))
+
 ## [0.1.1](https://github.com/NerdIT-Tech/devcontainer-features/compare/opencode/v0.1.0...opencode/v0.1.1) (2026-09-04)
 
 
