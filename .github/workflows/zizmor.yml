@@ -20,7 +20,7 @@ jobs:
   zizmor:
     name: Audit workflows
     # Pinned by commit SHA -- see conventional-commits.yml for why.
-    uses: NerdIT-Tech/.github/.github/workflows/reusable-zizmor.yml@41b0a3b6f8827523ab34e68766b76a82cd7bc7d3
+    uses: NerdIT-Tech/.github/.github/workflows/reusable-zizmor.yml@c11c34a7f1d44a04587023f859f448b7c12f23ba
     permissions:
       contents: read
     with:
