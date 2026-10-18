@@ -1,6 +1,6 @@
 {
     "id": "opencode",
-    "version": "0.1.1",
+    "version": "0.1.2",
     "name": "Install OpenCode CLI",
     "description": "Installs the OpenCode CLI onto the system PATH so it is available to the remote user. Uses the official installer (https://opencode.ai/install). By default installs the latest release; pass 'version' to pin a major (e.g., '1', '2') or specific release (e.g., '1.18.34', '0.0.55') or 'latest'. The binary is installed to /usr/local/bin so it works for any shell in the container without modifying rc files.",
     "options": {
